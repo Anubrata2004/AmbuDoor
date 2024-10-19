@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambulance Driver Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .pickup-info {
+            margin-top: 20px;
+        }
+        .pickup-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .pickup-card h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+        .pickup-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pickup Information</h1>
+        <div id="pickup-info" class="pickup-info"></div>
+    </div>
+
+    <script>
+        // Fetch and display pickup information from backend API
+        async function fetchPickupInfo() {
+            try {
+                const response = await fetch('http://localhost:5000/pickup-info');
+                const data = await response.json();
+
+                const pickupInfoContainer = document.getElementById('pickup-info');
+                pickupInfoContainer.innerHTML = ''; // Clear previous data
+
+                data.forEach(info => {
+                    const pickupCard = `
+                        <div class="pickup-card">
+                            <h3>Location: ${info.locationName}</h3>
+                            <p>Phone Number: ${info.phoneNumber}</p>
+                        </div>
+                    `;
+                    pickupInfoContainer.innerHTML += pickupCard;
+                });
+            } catch (error) {
+                console.error('Error fetching pickup info:', error);
+            }
+        }
+
+        // Call the function on page load
+        fetchPickupInfo();
+    </script>
+</body>
+</html>

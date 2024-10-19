@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AmbuDoor Driver</title>
+    <style>
+        body {
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: blue;
+            padding: 15px 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            font-size: 20px;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 60px); /* Adjust for navbar height */
+        }
+
+        .login-form {
+            background-color: rgba(249, 249, 249, 0.9); /* Slight transparency for better visibility */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .login-form h2 {
+            text-align: center;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkblue;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: blue;
+            text-decoration: none;
+        }
+
+        .terms-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <div class="logo">AmbuDoor</div>
+            <div class="nav-item">Driver Login</div>
+        </div>
+    </nav>
+    <div class="login-container">
+        <form class="login-form" id="driver-login-form">
+            <h2>Driver Login</h2>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="ambulance-number">Ambulance Car Number:</label>
+            <input type="text" id="ambulance-number" name="ambulance-number" required>
+
+            <label for="hospital-name">Hospital Name:</label>
+            <input type="text" id="hospital-name" name="hospital-name" required>
+
+            <label for="phone-number">Phone Number (+91):</label>
+            <input type="text" id="phone-number" name="phone-number" placeholder="+91 " pattern="\+91 [0-9]{10}" required>
+
+            <label for="car-details">Car Details:</label>
+            <input type="text" id="car-details" name="car-details" required>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('driver-login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form default submission
+
+            // Capture form data
+            const name = document.getElementById('name').value;
+            const ambulanceNumber = document.getElementById('ambulance-number').value;
+            const hospitalName = document.getElementById('hospital-name').value;
+            const phoneNumber = document.getElementById('phone-number').value;
+            const carDetails = document.getElementById('car-details').value;
+
+            // Send form data to the backend
+            fetch('http://localhost:5000/api/driver-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    ambulanceNumber: ambulanceNumber,
+                    hospitalName: hospitalName,
+                    phoneNumber: phoneNumber,
+                    carDetails: carDetails
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Login successful!');
+                    window.location.href = 'driver-dashboard.html'; // Redirect to driver's dashboard
+                } else {
+                    alert('Login failed: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shortest Route from Heritage to Dafodil Hospital</title>
+    <style>
+        /* Basic styling for the map */
+        #map {
+            height: 90vh;
+            width: 100%;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align: center;">Shortest Route from Heritage Institute to Dafodil Hospital</h1>
+<div id="map"></div>
+
+<!-- Load Google Maps API without the callback -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRrOn3xVA8idFCjbdaLPLEVF1uagRglEY"></script>
+
+<script>
+    // Function to initialize the map and directions
+    function initMap() {
+        // Create a map centered on Heritage Institute of Technology
+        const heritageLocation = { lat: 22.574639, lng: 88.474570 };  // Latitude and longitude of Heritage Institute
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 13,
+            center: heritageLocation,
+        });
+
+        // Define the Directions Service and Renderer
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
+
+        // Define the route request from Heritage to Dafodil Hospital
+        const routeRequest = {
+            origin: heritageLocation,  // Starting point: Heritage Institute
+            destination: { lat: 22.490678, lng: 88.392469 },  // Latitude and longitude of Dafodil Hospital
+            travelMode: google.maps.TravelMode.DRIVING,  // We are calculating the driving route
+        };
+
+        // Use the directions service to calculate and display the route
+        directionsService.route(routeRequest, (result, status) => {
+            if (status === "OK") {
+                directionsRenderer.setDirections(result);
+            } else {
+                window.alert("Directions request failed due to " + status);
+            }
+        });
+    }
+
+    // Call initMap when the page loads
+    window.onload = initMap;
+</script>
+
+</body>
+</html>

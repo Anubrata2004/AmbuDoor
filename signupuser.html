@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - AmbuDoor User</title>
+    <style>
+        body {
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: blue;
+            padding: 15px 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            font-size: 20px;
+        }
+
+        .home-button {
+            background-color: white;
+            color: blue;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+            border: 2px solid blue;
+        }
+
+        .home-button:hover {
+            background-color: blue;
+            color: white;
+        }
+
+        .signup-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 60px);
+        }
+
+        .signup-form {
+            background-color: rgba(249, 249, 249, 0.9);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .signup-form h2 {
+            text-align: center;
+        }
+
+        .signup-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .signup-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkblue;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <div class="logo">AmbuDoor</div>
+            <div class="nav-item">
+                <a href="index2.html" class="home-button">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="signup-container">
+        <form class="signup-form" id="user-signup-form">
+            <h2>User Signup</h2>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="phone-number">Phone Number (+91):</label>
+            <input type="text" id="phone-number" name="phone-number" placeholder="+91" pattern="\+91 [0-9]{10}" required>
+
+            <label for="hospital">Preferred Hospital:</label>
+            <input type="text" id="hospital" name="hospital" required>
+
+            <label for="condition">Medical Condition (if any):</label>
+            <input type="text" id="condition" name="condition">
+
+            <button type="submit">Signup</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('user-signup-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const phoneNumber = document.getElementById('phone-number').value;
+            const hospital = document.getElementById('hospital').value;
+            const condition = document.getElementById('condition').value;
+
+            fetch('http://localhost:5000/api/user-signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name,
+                    address,
+                    phoneNumber,
+                    hospital,
+                    condition
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Signup successful!');
+                    window.location.href = 'user-dashboard.html'; 
+                } else {
+                    alert('Signup failed: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmbuDoor - Ambulance Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ambulance Tracker</h1>
+        <div id="map"></div>
+        <button id="trackButton">Track Ambulance Location</button>
+    </div>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key="></script>
+    <script>
+        let map;
+        let userMarker;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 22.5726, lng: 88.3639 }, // Coordinates for Kolkata
+                zoom: 12,
+            });
+        }
+
+        document.getElementById("trackButton").addEventListener("click", () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    console.log("Position obtained:", position); // Log position
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    
+                    if (userMarker) {
+                        userMarker.setPosition(userLocation);
+                    } else {
+                        userMarker = new google.maps.Marker({
+                            position: userLocation,
+                            map: map,
+                            title: "You are here!",
+                        });
+                    }
+                    map.setCenter(userLocation);
+                }, () => {
+                    handleLocationError(true);
+                });
+            } else {
+                handleLocationError(false);
+            }
+        });
+
+        function handleLocationError(browserHasGeolocation) {
+            const errorMessage = browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation.";
+            alert(errorMessage);
+        }
+
+        // Initialize the map
+        initMap();
+    </script>
+</body>
+</html>
