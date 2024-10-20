@@ -109,7 +109,7 @@
 
     <div class="form-container">
         <h2>User Login</h2>
-        <input type="text" id="phone" placeholder="Phone Number (+91)" required>
+        <input type="text" id="phoneNumber" placeholder="Phone Number (+91)" required>
         <input type="password" id="password" placeholder="Password" required>
         <button class="login-button" id="loginBtn">Login</button>
         <div class="message" id="message"></div>
@@ -117,21 +117,21 @@
 
     <script>
         document.getElementById('loginBtn').addEventListener('click', async () => {
-            const phone = document.getElementById('phone').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
             const password = document.getElementById('password').value;
 
             // Validate phone number format
-            if (!phone.startsWith('+91')) {
+            if (!phoneNumber.startsWith('+91')) {
                 alert('Phone number must start with +91');
                 return;
             }
 
-            const response = await fetch('http://localhost:3000/login', {
+            const response = await fetch('http://localhost:5000/api/user-login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ phone, password })
+                body: JSON.stringify({ phoneNumber, password })
             });
 
             const result = await response.json();
@@ -149,5 +149,3 @@
     </script>
 </body>
 </html>
-
-
