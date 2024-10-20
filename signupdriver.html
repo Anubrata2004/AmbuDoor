@@ -73,7 +73,7 @@
             margin-bottom: 5px;
         }
 
-        .signup-form input {
+        .signup-form input, .signup-form select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -117,7 +117,19 @@
             <input type="text" id="ambulance-number" name="ambulance-number" required>
 
             <label for="hospital-name">Hospital Name:</label>
-            <input type="text" id="hospital-name" name="hospital-name" required>
+            <select id="hospital-name" name="hospital-name" required>
+                <option value="" disabled selected>Select a hospital</option>
+                <option value="Ruby General Hospital">Ruby General Hospital</option>
+                <option value="Medica Superspecialty Hospital">Medica Superspecialty Hospital</option>
+                <option value="Peerless Hospital">Peerless Hospital</option>
+                <option value="AMRI Hospital, Mukundapur">AMRI Hospital, Mukundapur</option>
+                <option value="Fortis Hospital, Anandapur">Fortis Hospital, Anandapur</option>
+                <option value="Desun Hospital">Desun Hospital</option>
+                <option value="Apollo Gleneagles Hospitals">Apollo Gleneagles Hospitals</option>
+                <option value="Dafodil Hospital">Dafodil Hospital</option>
+                <option value="Woodlands Multispeciality Hospital">Woodlands Multispeciality Hospital</option>
+                <option value="R G Kar Medical College and Hospital">R G Kar Medical College and Hospital</option>
+            </select>
 
             <label for="phone-number">Phone Number (+91):</label>
             <input type="text" id="phone-number" name="phone-number" placeholder="+91" pattern="\+91 [0-9]{10}" required>

@@ -69,6 +69,7 @@
             <input type="text" id="name" placeholder="Name" required>
             <input type="text" id="phone" placeholder="Phone Number" required>
             <input type="text" id="pickupLocation" placeholder="Pickup Location" required>
+            <input type="text" id="dropLocation" placeholder="Drop Location (Hospital)" required> <!-- New Drop Location field -->
             <button type="button" id="trackButton" onclick="redirectToPage()">Track</button>
             <button type="submit" class="submit-button">Submit</button>
         </form>
@@ -87,7 +88,8 @@
             const formData = {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
-                pickupLocation: document.getElementById('pickupLocation').value
+                pickupLocation: document.getElementById('pickupLocation').value,
+                dropLocation: document.getElementById('dropLocation').value // Include drop location
             };
 
             // Send form data to the backend
