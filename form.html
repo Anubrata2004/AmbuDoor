@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Ambulance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #ffcc00;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Book Ambulance</h1>
+        <form id="bookingForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="phone" placeholder="Phone Number" required>
+            <input type="text" id="pickupLocation" placeholder="Pickup Location" required>
+            <button id="trackButton" disabled>Track</button>
+        </form>
+    </div>
+
+    <script>
+        // Get form inputs and track button
+        const nameInput = document.getElementById('name');
+        const phoneInput = document.getElementById('phone');
+        const pickupLocationInput = document.getElementById('pickupLocation');
+        const trackButton = document.getElementById('trackButton');
+
+        // Enable the track button when all fields are filled
+        function validateForm() {
+            const isValid = nameInput.value && phoneInput.value && pickupLocationInput.value;
+            trackButton.disabled = !isValid;
+        }
+
+        // Attach validation check to form inputs
+        nameInput.addEventListener('input', validateForm);
+        phoneInput.addEventListener('input', validateForm);
+        pickupLocationInput.addEventListener('input', validateForm);
+
+        // Form submission handler
+        document.getElementById('bookingForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const formData = {
+                name: nameInput.value,
+                phone: phoneInput.value,
+                pickupLocation: pickupLocationInput.value
+            };
+
+            // Send form data to the backend
+            fetch('/api/book-ambulance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to tracker.html
+                    window.location.href = 'tracker.html';
+                } else {
+                    alert('Error booking ambulance');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+

@@ -185,7 +185,7 @@
         <p>Your reliable solution for booking ambulances quickly and efficiently. Just a click away from emergency assistance!</p>
     </div>
 
-    <button class="book-ambulance-btn">BOOK AMBULANCE</button>
+    <button class="book-ambulance-btn" onclick="window.location.href='bookambulance.html'">BOOK AMBULANCE</button>
 
     <!-- Language Buttons -->
     <div class="language-buttons">
@@ -199,8 +199,8 @@
         <div class="modal-content">
             <span id="closeBtn">&times;</span>
             <h2>Choose an option</h2>
-            <button class="option-btn">User</button>
-            <button class="option-btn">Driver</button>
+            <button class="option-btn" id="userBtn">User</button>
+            <button class="option-btn" id="driverBtn">Driver</button>
         </div>
     </div>
 
@@ -246,21 +246,29 @@
         });
 
         // JavaScript to handle modal interactions
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            document.getElementById('modal').style.display = 'flex';
-        });
+        function setupModalListeners() {
+            document.getElementById('loginBtn').addEventListener('click', openModal);
+            document.getElementById('signupBtn').addEventListener('click', openModal);
+            document.getElementById('closeBtn').addEventListener('click', closeModal);
+            document.getElementById('userBtn').addEventListener('click', () => {
+                window.location.href = 'signupuser.html';
+            });
+            document.getElementById('driverBtn').addEventListener('click', () => {
+                window.location.href = 'signupdriver.html';
+            });
+        }
 
-        document.getElementById('signupBtn').addEventListener('click', () => {
+        function openModal() {
             document.getElementById('modal').style.display = 'flex';
-        });
+        }
 
-        document.getElementById('closeBtn').addEventListener('click', () => {
+        function closeModal() {
             document.getElementById('modal').style.display = 'none';
-        });
+        }
 
         window.addEventListener('click', (e) => {
             if (e.target === document.getElementById('modal')) {
-                document.getElementById('modal').style.display = 'none';
+                closeModal();
             }
         });
 
@@ -277,8 +285,8 @@
                 driver: "Driver"
             },
             bengali: {
-                welcome: "এম্বু-ডোর এ স্বাগতম",
-                description: "এটি একটি বিশ্বাসযোগ্য সমাধান যা আপনাকে দ্রুত এবং কার্যকরভাবে অ্যাম্বুলেন্স বুক করতে সহায়তা করে। জরুরী সাহায্যের জন্য শুধু একটি ক্লিক দূরে!",
+                welcome: "এম্বু-ডোরে আপনার স্বাগতম",
+                description: "এম্বুলেন্স দ্রুত এবং দক্ষতার সাথে বুক করার জন্য আপনার নির্ভরযোগ্য সমাধান। জরুরি সহায়তার জন্য মাত্র একটি ক্লিক দূরে!",
                 login: "লগইন",
                 signup: "সাইন আপ",
                 bookAmbulance: "এম্বুলেন্স বুক করুন",
@@ -304,7 +312,7 @@
             document.getElementById('loginBtn').innerText = translations[lang].login;
             document.getElementById('signupBtn').innerText = translations[lang].signup;
             document.querySelector('.book-ambulance-btn').innerText = translations[lang].bookAmbulance;
-            document.getElementById('closeBtn').innerText = '&times;';
+            document.getElementById('closeBtn').innerHTML = '&times;';
             document.querySelector('.modal-content h2').innerText = translations[lang].chooseOption;
             document.querySelectorAll('.option-btn')[0].innerText = translations[lang].user;
             document.querySelectorAll('.option-btn')[1].innerText = translations[lang].driver;
@@ -313,6 +321,9 @@
         document.getElementById('englishBtn').addEventListener('click', () => translate('english'));
         document.getElementById('bengaliBtn').addEventListener('click', () => translate('bengali'));
         document.getElementById('hindiBtn').addEventListener('click', () => translate('hindi'));
+
+        // Call to setup listeners when the page loads
+        setupModalListeners();
     </script>
 
     <footer>
@@ -320,5 +331,3 @@
     </footer>
 </body>
 </html>
-
-

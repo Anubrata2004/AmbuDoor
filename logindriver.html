@@ -105,20 +105,11 @@
         <form class="login-form" id="driver-login-form">
             <h2>Driver Login</h2>
 
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="ambulance-number">Ambulance Car Number:</label>
-            <input type="text" id="ambulance-number" name="ambulance-number" required>
-
-            <label for="hospital-name">Hospital Name:</label>
-            <input type="text" id="hospital-name" name="hospital-name" required>
-
             <label for="phone-number">Phone Number (+91):</label>
             <input type="text" id="phone-number" name="phone-number" placeholder="+91 " pattern="\+91 [0-9]{10}" required>
 
-            <label for="car-details">Car Details:</label>
-            <input type="text" id="car-details" name="car-details" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
 
             <button type="submit">Login</button>
         </form>
@@ -129,31 +120,25 @@
             event.preventDefault(); // Prevent form default submission
 
             // Capture form data
-            const name = document.getElementById('name').value;
-            const ambulanceNumber = document.getElementById('ambulance-number').value;
-            const hospitalName = document.getElementById('hospital-name').value;
             const phoneNumber = document.getElementById('phone-number').value;
-            const carDetails = document.getElementById('car-details').value;
+            const password = document.getElementById('password').value;
 
-            // Send form data to the backend
+            // Send form data to the backend for login validation
             fetch('http://localhost:5000/api/driver-login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: name,
-                    ambulanceNumber: ambulanceNumber,
-                    hospitalName: hospitalName,
                     phoneNumber: phoneNumber,
-                    carDetails: carDetails
+                    password: password
                 })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     alert('Login successful!');
-                    window.location.href = 'driver-dashboard.html'; // Redirect to driver's dashboard
+                    window.location.href = 'index2.html'; // Redirect to index2.html
                 } else {
                     alert('Login failed: ' + data.message);
                 }
@@ -163,3 +148,4 @@
     </script>
 </body>
 </html>
+

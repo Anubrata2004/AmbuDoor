@@ -94,6 +94,44 @@
         button:hover {
             background-color: darkblue;
         }
+
+        /* Added styles for success modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -125,8 +163,21 @@
             <label for="condition">Medical Condition (if any):</label>
             <input type="text" id="condition" name="condition">
 
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
             <button type="submit">Signup</button>
         </form>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Signup Successful!</h2>
+            <img src="success-image.png" alt="Success" style="width: 100px; height: auto;">
+            <p>Redirecting you to the home page...</p>
+        </div>
     </div>
 
     <script>
@@ -138,6 +189,7 @@
             const phoneNumber = document.getElementById('phone-number').value;
             const hospital = document.getElementById('hospital').value;
             const condition = document.getElementById('condition').value;
+            const password = document.getElementById('password').value;
 
             fetch('http://localhost:5000/api/user-signup', {
                 method: 'POST',
@@ -149,20 +201,32 @@
                     address,
                     phoneNumber,
                     hospital,
-                    condition
+                    condition,
+                    password // Sending password in the request body
                 })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Signup successful!');
-                    window.location.href = 'user-dashboard.html'; 
+                    // Show success modal
+                    const modal = document.getElementById('successModal');
+                    modal.style.display = "block";
+
+                    // Redirect after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = 'index2.html'; 
+                    }, 3000);
                 } else {
                     alert('Signup failed: ' + data.message);
                 }
             })
             .catch(error => console.error('Error:', error));
         });
+
+        // Close the modal when the user clicks on <span> (x)
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('successModal').style.display = "none";
+        }
     </script>
 </body>
 </html>
