@@ -194,13 +194,15 @@
         <button id="hindiBtn">Hindi</button>
     </div>
 
+    
+
     <!-- Create Modal -->
     <div class="modal" id="modal">
         <div class="modal-content">
             <span id="closeBtn">&times;</span>
             <h2>Choose an option</h2>
-            <button class="option-btn" id="userBtn">User</button>
-            <button class="option-btn" id="driverBtn">Driver</button>
+            <button class="option-btn" onclick="window.location.href='signupuser.html'">User</button>
+            <button class="option-btn" onclick="window.location.href='signupdriver.html'">Driver</button>
         </div>
     </div>
 
@@ -245,21 +247,15 @@
             }
         });
 
-        let isLogin = true; // Variable to track if the modal was opened by login or signup
-
-        // Open modal for login
+        // JavaScript to handle modal interactions
         document.getElementById('loginBtn').addEventListener('click', () => {
-            isLogin = true;
             document.getElementById('modal').style.display = 'flex';
         });
 
-        // Open modal for signup
         document.getElementById('signupBtn').addEventListener('click', () => {
-            isLogin = false;
             document.getElementById('modal').style.display = 'flex';
         });
 
-        // Close the modal
         document.getElementById('closeBtn').addEventListener('click', () => {
             document.getElementById('modal').style.display = 'none';
         });
@@ -267,23 +263,6 @@
         window.addEventListener('click', (e) => {
             if (e.target === document.getElementById('modal')) {
                 document.getElementById('modal').style.display = 'none';
-            }
-        });
-
-        // Redirect based on whether it's a login or signup action
-        document.getElementById('userBtn').addEventListener('click', () => {
-            if (isLogin) {
-                window.location.href = 'loginuser.html'; // Redirect to user login page
-            } else {
-                window.location.href = 'signupuser.html'; // Redirect to user signup page
-            }
-        });
-
-        document.getElementById('driverBtn').addEventListener('click', () => {
-            if (isLogin) {
-                window.location.href = 'logindriver.html'; // Redirect to driver login page
-            } else {
-                window.location.href = 'signupdriver.html'; // Redirect to driver signup page
             }
         });
 
@@ -343,5 +322,4 @@
     </footer>
 </body>
 </html>
-
 

@@ -245,21 +245,15 @@
             }
         });
 
-        let isLogin = true; // Variable to track if the modal was opened by login or signup
-
-        // Open modal for login
+        // JavaScript to handle modal interactions
         document.getElementById('loginBtn').addEventListener('click', () => {
-            isLogin = true;
             document.getElementById('modal').style.display = 'flex';
         });
 
-        // Open modal for signup
         document.getElementById('signupBtn').addEventListener('click', () => {
-            isLogin = false;
             document.getElementById('modal').style.display = 'flex';
         });
 
-        // Close the modal
         document.getElementById('closeBtn').addEventListener('click', () => {
             document.getElementById('modal').style.display = 'none';
         });
@@ -270,21 +264,13 @@
             }
         });
 
-        // Redirect based on whether it's a login or signup action
+        // User and Driver Button Click Handlers
         document.getElementById('userBtn').addEventListener('click', () => {
-            if (isLogin) {
-                window.location.href = 'loginuser.html'; // Redirect to user login page
-            } else {
-                window.location.href = 'signupuser.html'; // Redirect to user signup page
-            }
+            window.location.href = 'loginuser.html'; // Navigate to user login page
         });
 
         document.getElementById('driverBtn').addEventListener('click', () => {
-            if (isLogin) {
-                window.location.href = 'logindriver.html'; // Redirect to driver login page
-            } else {
-                window.location.href = 'signupdriver.html'; // Redirect to driver signup page
-            }
+            window.location.href = 'logindriver.html'; // Navigate to driver login page
         });
 
         // Translation Functionality
@@ -343,5 +329,3 @@
     </footer>
 </body>
 </html>
-
-

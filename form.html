@@ -55,6 +55,10 @@
             background-color: #ddd;
             cursor: not-allowed;
         }
+
+        .submit-button {
+            background-color: #4CAF50; /* Green */
+        }
     </style>
 </head>
 <body>
@@ -65,36 +69,25 @@
             <input type="text" id="name" placeholder="Name" required>
             <input type="text" id="phone" placeholder="Phone Number" required>
             <input type="text" id="pickupLocation" placeholder="Pickup Location" required>
-            <button id="trackButton" disabled>Track</button>
+            <button type="button" id="trackButton" onclick="redirectToPage()">Track</button>
+            <button type="submit" class="submit-button">Submit</button>
         </form>
     </div>
 
     <script>
-        // Get form inputs and track button
-        const nameInput = document.getElementById('name');
-        const phoneInput = document.getElementById('phone');
-        const pickupLocationInput = document.getElementById('pickupLocation');
-        const trackButton = document.getElementById('trackButton');
-
-        // Enable the track button when all fields are filled
-        function validateForm() {
-            const isValid = nameInput.value && phoneInput.value && pickupLocationInput.value;
-            trackButton.disabled = !isValid;
+        // Function to redirect to page.html
+        function redirectToPage() {
+            window.location.href = 'page.html';
         }
-
-        // Attach validation check to form inputs
-        nameInput.addEventListener('input', validateForm);
-        phoneInput.addEventListener('input', validateForm);
-        pickupLocationInput.addEventListener('input', validateForm);
 
         // Form submission handler
         document.getElementById('bookingForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
 
             const formData = {
-                name: nameInput.value,
-                phone: phoneInput.value,
-                pickupLocation: pickupLocationInput.value
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                pickupLocation: document.getElementById('pickupLocation').value
             };
 
             // Send form data to the backend
@@ -108,7 +101,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Redirect to tracker.html
+                    // Redirect to tracker.html if the booking was successful
                     window.location.href = 'tracker.html';
                 } else {
                     alert('Error booking ambulance');
