@@ -2,6 +2,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const driverRoutes = require('./routes/driverRoutes');
 const userRoutes = require('./routes/userRoutes');
+const ambulanceBookingRoutes = require('./routes/ambulanceBookingRoutes');
 const cors = require('cors');
 
 // Initialize app
@@ -16,7 +17,8 @@ app.use(cors()); // To handle cross-origin requests
 
 // Routes
 app.use('/api', driverRoutes);
-app.use('/api', userRoutes);
+app.use('/api', userRoutes);// Use the booking route
+app.use('/api', ambulanceBookingRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;
