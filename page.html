@@ -79,7 +79,7 @@
 
     <script>
         // Fetch data from the backend API
-        fetch('/api/ambulance/pickup-info') // Make sure the backend API is working and correct
+        fetch('http://localhost:5000/api/ambulance/pickup-info') // Make sure the backend API is working and correct
             .then(response => response.json())
             .then(data => {
                 document.getElementById('pickup-location').textContent = data.pickupLocation;

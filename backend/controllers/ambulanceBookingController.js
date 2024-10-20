@@ -34,3 +34,31 @@ exports.bookAmbulance = async (req, res) => {
         });
     }
 };
+
+// Controller function to fetch the latest booking info
+exports.getLatestPickupInfo = async (req, res) => {
+    try {
+        // Find the most recent booking
+        const latestBooking = await AmbulanceBooking.findOne().sort({ createdAt: -1 });
+
+        // If no bookings are found, return an error
+        if (!latestBooking) {
+            return res.status(404).json({
+                success: false,
+                message: 'No bookings found'
+            });
+        }
+
+        // Return the latest booking's pickup location and phone number
+        return res.status(200).json({
+            success: true,
+            pickupLocation: latestBooking.pickupLocation,
+            phoneNumber: latestBooking.phone
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Server error, please try again later'
+        });
+    }
+};
