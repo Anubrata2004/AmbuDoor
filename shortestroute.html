@@ -3,77 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shortest Route from Heritage to Dafodil Hospital</title>
+    <title>Book Ambulance</title>
+
+    <!-- Leaflet.js CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet Routing Machine CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
     <style>
-        /* Basic styling for the map */
-        #map {
-            height: 90vh;
-            width: 100%;
-        }
         body {
             font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
         }
-        .info {
-            background: white;
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input, select {
+            margin-bottom: 15px;
             padding: 10px;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-            border-radius: 5px;
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #ffcc00;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .submit-button {
+            background-color: #4CAF50; /* Green */
+        }
+
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        #time-estimate {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #333;
         }
     </style>
 </head>
 <body>
 
-<div class="info">
-    <h4>Route Information</h4>
-    <div id="duration">Estimated Travel Time: </div>
-</div>
+    <div class="container">
+        <h1>Book Ambulance</h1>
+        <form id="bookingForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="phone" placeholder="Phone Number" required>
+            <input type="text" id="pickupLocation" placeholder="Pickup Location" required>
 
-<h1 style="text-align: center;">Shortest Route from Heritage Institute to Dafodil Hospital</h1>
-<div id="map"></div>
+            <!-- Hospital dropdown -->
+            <select id="dropLocation" required>
+                <option value="" disabled selected>Select Drop Location (Hospital)</option>
+                <option value="Ruby General Hospital">Ruby General Hospital</option>
+                <option value="Medica Superspecialty Hospital">Medica Superspecialty Hospital</option>
+                <option value="Peerless Hospital">Peerless Hospital</option>
+                <option value="AMRI Hospital, Mukundapur">AMRI Hospital, Mukundapur</option>
+                <option value="Fortis Hospital, Anandapur">Fortis Hospital, Anandapur</option>
+                <option value="Desun Hospital">Desun Hospital</option>
+                <option value="Apollo Gleneagles Hospitals">Apollo Gleneagles Hospitals</option>
+                <option value="Dafodil Hospital">Dafodil Hospital</option>
+                <option value="Woodlands Multispeciality Hospital">Woodlands Multispeciality Hospital</option>
+                <option value="R G Kar Medical College and Hospital">R G Kar Medical College and Hospital</option>
+            </select>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
 
-<script>
-    // Initialize the map
-    const map = L.map('map').setView([22.574639, 88.474570], 13); // Center on Heritage Institute
+        <div id="time-estimate"></div> <!-- To display the estimated travel time -->
+    </div>
 
-    // Set up OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-    }).addTo(map);
+    <!-- Leaflet.js JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine JavaScript -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 
-    // Define the locations
-    const heritageLocation = [22.574639, 88.474570]; // Heritage Institute
-    const dafodilHospital = [22.490678, 88.392469]; // Dafodil Hospital
+    <div id="map"></div>
 
-    // Add routing control to the map
-    const routingControl = L.Routing.control({
-        waypoints: [
-            L.latLng(heritageLocation),
-            L.latLng(dafodilHospital)
-        ],
-        routeWhileDragging: true,
-        createMarker: function() { return null; }, // Disable default markers
-        styles: [{color: '#ff0000', opacity: 0.7, weight: 5}], // Set route color
-    }).addTo(map);
+    <script>
+        const geocodeURL = 'https://nominatim.openstreetmap.org/search?format=json&q=';
 
-    // Display travel time when the route is calculated
-    routingControl.on('routesfound', function(e) {
-        const routes = e.routes;
-        const totalTime = routes[0].summary.totalTime; // Time in seconds
-        const durationText = document.getElementById('duration');
-        durationText.innerHTML = `Estimated Travel Time: ${Math.round(totalTime / 60)} minutes`;
-    });
-</script>
+        const map = L.map('map').setView([22.5726, 88.3639], 12); // Centered on Kolkata
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        document.getElementById('bookingForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const pickupLocation = document.getElementById('pickupLocation').value;
+            const dropLocation = document.getElementById('dropLocation').value;
+
+            // Geocode both pickup location and drop location to get lat/lon coordinates
+            Promise.all([geocode(pickupLocation), geocode(dropLocation)]).then(([pickupCoords, dropCoords]) => {
+                // Display the route on the map
+                const routingControl = L.Routing.control({
+                    waypoints: [
+                        L.latLng(pickupCoords.lat, pickupCoords.lon),
+                        L.latLng(dropCoords.lat, dropCoords.lon)
+                    ],
+                    lineOptions: {
+                        styles: [{ color: 'red', weight: 4 }] // Red route
+                    },
+                    createMarker: function() { return null; }, // No markers
+                    routeWhileDragging: false
+                }).addTo(map);
+
+                // Calculate and display the estimated time
+                routingControl.on('routesfound', function(e) {
+                    const route = e.routes[0];
+                    const distanceInKm = route.summary.totalDistance / 1000; // Convert meters to kilometers
+                    const averageSpeed = 60; // Assume 60 km/h as average speed
+                    const estimatedTime = (distanceInKm / averageSpeed) * 60; // In minutes
+
+                    document.getElementById('time-estimate').innerText = `Estimated Time: ${estimatedTime.toFixed(2)} minutes`;
+                });
+            }).catch(error => {
+                console.error('Error fetching coordinates:', error);
+                alert('Failed to calculate route. Please try again.');
+            });
+        });
+
+        // Function to geocode an address into latitude/longitude
+        function geocode(address) {
+            return fetch(geocodeURL + encodeURIComponent(address))
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        return { lat: data[0].lat, lon: data[0].lon };
+                    } else {
+                        throw new Error('No results found for the address: ' + address);
+                    }
+                });
+        }
+    </script>
 
 </body>
 </html>

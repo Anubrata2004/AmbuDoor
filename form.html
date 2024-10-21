@@ -33,7 +33,7 @@
             flex-direction: column;
         }
 
-        input {
+        input, select {
             margin-bottom: 15px;
             padding: 10px;
             font-size: 16px;
@@ -69,7 +69,22 @@
             <input type="text" id="name" placeholder="Name" required>
             <input type="text" id="phone" placeholder="Phone Number" required>
             <input type="text" id="pickupLocation" placeholder="Pickup Location" required>
-            <input type="text" id="dropLocation" placeholder="Drop Location (Hospital)" required> <!-- New Drop Location field -->
+
+            <!-- Hospital dropdown -->
+            <select id="dropLocation" required>
+                <option value="" disabled selected>Select Drop Location (Hospital)</option>
+                <option value="Ruby General Hospital">Ruby General Hospital</option>
+                <option value="Medica Superspecialty Hospital">Medica Superspecialty Hospital</option>
+                <option value="Peerless Hospital">Peerless Hospital</option>
+                <option value="AMRI Hospital, Mukundapur">AMRI Hospital, Mukundapur</option>
+                <option value="Fortis Hospital, Anandapur">Fortis Hospital, Anandapur</option>
+                <option value="Desun Hospital">Desun Hospital</option>
+                <option value="Apollo Gleneagles Hospitals">Apollo Gleneagles Hospitals</option>
+                <option value="Dafodil Hospital">Dafodil Hospital</option>
+                <option value="Woodlands Multispeciality Hospital">Woodlands Multispeciality Hospital</option>
+                <option value="R G Kar Medical College and Hospital">R G Kar Medical College and Hospital</option>
+            </select>
+
             <button type="button" id="trackButton" onclick="redirectToPage()">Track</button>
             <button type="submit" class="submit-button">Submit</button>
         </form>
@@ -89,7 +104,7 @@
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
                 pickupLocation: document.getElementById('pickupLocation').value,
-                dropLocation: document.getElementById('dropLocation').value // Include drop location
+                dropLocation: document.getElementById('dropLocation').value // Include drop location from dropdown
             };
 
             // Send form data to the backend
@@ -117,5 +132,3 @@
 
 </body>
 </html>
-
-

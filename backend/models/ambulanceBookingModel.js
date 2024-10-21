@@ -14,6 +14,10 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    dropLocation: {
+        type: String, // New dropLocation field
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now

@@ -3,122 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup - AmbuDoor Driver</title>
+    <title>Book Ambulance</title>
     <style>
         body {
-            background-size: cover;
-            background-position: center;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav {
-            background-color: blue;
-            padding: 15px 20px;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            color: white;
-            font-size: 24px;
-        }
-
-        .nav-item {
-            color: white;
-            font-size: 20px;
-        }
-
-        .home-button {
-            background-color: white;
-            color: blue;
-            padding: 8px 15px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 16px;
-            border: 2px solid blue;
-        }
-
-        .home-button:hover {
-            background-color: blue;
-            color: white;
-        }
-
-        .signup-container {
+            background-color: #f5f5f5;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: calc(100vh - 60px);
+            height: 100vh;
+            margin: 0;
         }
 
-        .signup-form {
-            background-color: rgba(249, 249, 249, 0.9);
+        .container {
+            background-color: white;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 300px;
-        }
-
-        .signup-form h2 {
             text-align: center;
         }
 
-        .signup-form label {
-            display: block;
-            margin-bottom: 5px;
+        h1 {
+            color: #333;
         }
 
-        .signup-form input, .signup-form select {
-            width: 100%;
-            padding: 10px;
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input, select {
             margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
 
         button {
-            width: 100%;
             padding: 10px;
-            background-color: blue;
-            color: white;
+            background-color: #ffcc00;
             border: none;
+            color: white;
+            font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
         }
 
-        button:hover {
-            background-color: darkblue;
+        button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .submit-button {
+            background-color: #4CAF50; /* Green */
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="navbar">
-            <div class="logo">AmbuDoor</div>
-            <div class="nav-item">
-                <a href="index2.html" class="home-button">Home</a>
-            </div>
-        </div>
-    </nav>
 
-    <div class="signup-container">
-        <form class="signup-form" id="driver-signup-form">
-            <h2>Driver Signup</h2>
+    <div class="container">
+        <h1>Book Ambulance</h1>
+        <form id="bookingForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="phone" placeholder="Phone Number" required>
+            <input type="text" id="pickupLocation" placeholder="Pickup Location" required>
 
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="ambulance-number">Ambulance Car Number:</label>
-            <input type="text" id="ambulance-number" name="ambulance-number" required>
-
-            <label for="hospital-name">Hospital Name:</label>
-            <select id="hospital-name" name="hospital-name" required>
-                <option value="" disabled selected>Select a hospital</option>
+            <!-- Hospital dropdown -->
+            <select id="dropLocation" required>
+                <option value="" disabled selected>Select Drop Location (Hospital)</option>
                 <option value="Ruby General Hospital">Ruby General Hospital</option>
                 <option value="Medica Superspecialty Hospital">Medica Superspecialty Hospital</option>
                 <option value="Peerless Hospital">Peerless Hospital</option>
@@ -131,56 +85,50 @@
                 <option value="R G Kar Medical College and Hospital">R G Kar Medical College and Hospital</option>
             </select>
 
-            <label for="phone-number">Phone Number (+91):</label>
-            <input type="text" id="phone-number" name="phone-number" placeholder="+91" pattern="\+91 [0-9]{10}" required>
-
-            <label for="car-details">Car Details:</label>
-            <input type="text" id="car-details" name="car-details" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <button type="submit">Signup</button>
+            <button type="button" id="trackButton" onclick="redirectToPage()">Track</button>
+            <button type="submit" class="submit-button">Submit</button>
         </form>
     </div>
 
     <script>
-        document.getElementById('driver-signup-form').addEventListener('submit', function(event) {
-            event.preventDefault();
+        // Function to redirect to page.html
+        function redirectToPage() {
+            window.location.href = 'page.html';
+        }
 
-            const name = document.getElementById('name').value;
-            const ambulanceNumber = document.getElementById('ambulance-number').value;
-            const hospitalName = document.getElementById('hospital-name').value;
-            const phoneNumber = document.getElementById('phone-number').value;
-            const carDetails = document.getElementById('car-details').value;
-            const password = document.getElementById('password').value;
+        // Form submission handler
+        document.getElementById('bookingForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
 
-            fetch('http://localhost:5000/api/driver-signup', {
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                pickupLocation: document.getElementById('pickupLocation').value,
+                dropLocation: document.getElementById('dropLocation').value // Include drop location from dropdown
+            };
+
+            // Send form data to the backend
+            fetch('http://localhost:5000/api/book-ambulance', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    name,
-                    ambulanceNumber,
-                    hospitalName,
-                    phoneNumber,
-                    carDetails,
-                    password
-                })
+                body: JSON.stringify(formData)
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Signup successful!');
-                    window.location.href = 'driver-dashboard.html'; 
+                    // Redirect to tracker.html if the booking was successful
+                    window.location.href = '2.html';
                 } else {
-                    alert('Signup failed: ' + data.message);
+                    alert('Error booking ambulance');
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
     </script>
+
 </body>
 </html>
-

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        select {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #driverDetails {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .driver-info {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Find Ambulance Driver</h1>
+
+        <!-- Hospital dropdown for selecting hospital name -->
+        <select id="hospitalSelect">
+            <option value="" disabled selected>Select a Hospital</option>
+            <option value="Ruby General Hospital">Ruby General Hospital</option>
+            <option value="Medica Superspecialty Hospital">Medica Superspecialty Hospital</option>
+            <option value="Peerless Hospital">Peerless Hospital</option>
+            <option value="AMRI Hospital, Mukundapur">AMRI Hospital, Mukundapur</option>
+            <option value="Fortis Hospital, Anandapur">Fortis Hospital, Anandapur</option>
+            <option value="Desun Hospital">Desun Hospital</option>
+            <option value="Apollo Gleneagles Hospitals">Apollo Gleneagles Hospitals</option>
+            <option value="Dafodil Hospital">Dafodil Hospital</option>
+            <option value="Woodlands Multispeciality Hospital">Woodlands Multispeciality Hospital</option>
+            <option value="R G Kar Medical College and Hospital">R G Kar Medical College and Hospital</option>
+        </select>
+
+        <button id="findDriverBtn">Find Driver</button>
+
+        <!-- Div to display driver details -->
+        <div id="driverDetails"></div>
+    </div>
+
+    <script>
+        document.getElementById('findDriverBtn').addEventListener('click', function() {
+            // Get the selected hospital name from the dropdown
+            const hospitalName = document.getElementById('hospitalSelect').value;
+
+            if (!hospitalName) {
+                alert("Please select a hospital.");
+                return;
+            }
+
+            // Fetch the driver details from the backend API
+            fetch(`http://localhost:5000/api/driver-random?hospitalName=${encodeURIComponent(hospitalName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Check if the driver details were found
+                    if (data.success && data.data) {
+                        const driver = data.data;
+
+                        // Create HTML content to show driver details
+                        const driverDetailsHTML = `
+                            <div class="driver-info">
+                                <p><strong>Name:</strong> ${driver.name}</p>
+                                <p><strong>Ambulance Number:</strong> ${driver.ambulanceNumber}</p>
+                                <p><strong>Hospital Name:</strong> ${driver.hospitalName}</p>
+                                <p><strong>Phone Number:</strong> ${driver.phoneNumber}</p>
+                                <p><strong>Car Details:</strong> ${driver.carDetails}</p>
+                            </div>
+                        `;
+
+                        // Display the driver details in the `driverDetails` div
+                        document.getElementById('driverDetails').innerHTML = driverDetailsHTML;
+                    } else {
+                        document.getElementById('driverDetails').innerHTML = `<p>No driver found for this hospital.</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching driver details:", error);
+                    document.getElementById('driverDetails').innerHTML = `<p>Error fetching driver details. Please try again later.</p>`;
+                });
+        });
+    </script>
+</body>
+</html>

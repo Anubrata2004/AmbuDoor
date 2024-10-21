@@ -63,3 +63,36 @@ exports.driverLogin = async (req, res) => {
         return res.status(500).json(ApiResponse(false, 'Server error, please try again.'));
     }
 };
+
+// Get a Random Driver by Hospital Name Controller
+exports.getRandomDriverByHospital = async (req, res) => {
+    const { hospitalName } = req.query;
+
+    try {
+        // Find all drivers working at the specified hospital
+        const drivers = await Driver.find({ hospitalName });
+
+        if (drivers.length === 0) {
+            return res.status(404).json(ApiResponse(false, 'No drivers found for this hospital.'));
+        }
+
+        // Select one random driver from the list
+        const randomIndex = Math.floor(Math.random() * drivers.length);
+        const randomDriver = drivers[randomIndex];
+
+        // Return the random driver details
+        const driverDetails = {
+            id: randomDriver._id,
+            name: randomDriver.name,
+            ambulanceNumber: randomDriver.ambulanceNumber,
+            hospitalName: randomDriver.hospitalName,
+            phoneNumber: randomDriver.phoneNumber,
+            carDetails: randomDriver.carDetails
+        };
+
+        return res.status(200).json(ApiResponse(true, 'Random driver found!', driverDetails));
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json(ApiResponse(false, 'Server error, please try again.'));
+    }
+};

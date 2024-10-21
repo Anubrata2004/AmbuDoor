@@ -1,14 +1,13 @@
 const AmbulanceBooking = require('../models/ambulanceBookingModel');
 
-// Controller function to handle ambulance booking
 exports.bookAmbulance = async (req, res) => {
-    const { name, phone, pickupLocation } = req.body;
+    const { name, phone, pickupLocation, dropLocation } = req.body; // Include dropLocation
 
     // Basic validation
-    if (!name || !phone || !pickupLocation) {
+    if (!name || !phone || !pickupLocation || !dropLocation) {
         return res.status(400).json({
             success: false,
-            message: 'All fields are required'
+            message: 'All fields (Name, Phone, Pickup Location, Drop Location) are required'
         });
     }
 
@@ -17,7 +16,8 @@ exports.bookAmbulance = async (req, res) => {
         const newBooking = new AmbulanceBooking({
             name,
             phone,
-            pickupLocation
+            pickupLocation,
+            dropLocation // Include dropLocation in the booking
         });
 
         // Save to the database
@@ -34,7 +34,6 @@ exports.bookAmbulance = async (req, res) => {
         });
     }
 };
-
 // Controller function to fetch the latest booking info
 exports.getLatestPickupInfo = async (req, res) => {
     try {
